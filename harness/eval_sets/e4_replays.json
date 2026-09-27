@@ -1,0 +1,258 @@
+[
+  {
+    "description": "identical canned text on FOUR DISTINCT conversation ids for one merchant (trap T2)",
+    "merchant_id": "m_001_drmeera_dentist_delhi",
+    "name": "auto-reply hell",
+    "scenario_id": "e4_001_auto_reply_hell",
+    "turns": [
+      {
+        "conversation_id": "conv_auto_1",
+        "description": "turn 1: canned text -> expect nudge",
+        "expected_action": "send",
+        "from_role": "merchant",
+        "message": "Thank you for contacting us! Our team will respond shortly.",
+        "turn_number": 2
+      },
+      {
+        "conversation_id": "conv_auto_2",
+        "description": "turn 2: repeat across conversations -> expect wait >= 86400",
+        "expected_action": "wait",
+        "from_role": "merchant",
+        "message": "Thank you for contacting us! Our team will respond shortly.",
+        "min_wait_seconds": 86400,
+        "turn_number": 3
+      },
+      {
+        "conversation_id": "conv_auto_3",
+        "description": "turn 3: end by turn 4",
+        "expected_action": "end",
+        "from_role": "merchant",
+        "message": "Thank you for contacting us! Our team will respond shortly.",
+        "turn_number": 4
+      },
+      {
+        "conversation_id": "conv_auto_4",
+        "description": "turn 4: stay ended",
+        "expected_action": "end",
+        "from_role": "merchant",
+        "message": "Thank you for contacting us! Our team will respond shortly.",
+        "turn_number": 5
+      }
+    ]
+  },
+  {
+    "description": "two qualifying turns then 'Ok lets do it. Whats next?' (trap T4)",
+    "merchant_id": "m_002_bharat_dentist_mumbai",
+    "name": "intent transition",
+    "scenario_id": "e4_002_intent_transition",
+    "turns": [
+      {
+        "conversation_id": "conv_intent_1",
+        "description": "action mode: must contain actioning token and NONE of qualifying bigrams",
+        "expected_action": "send",
+        "forbid_tokens": [
+          "would you",
+          "do you",
+          "can you tell",
+          "what if",
+          "how about"
+        ],
+        "from_role": "merchant",
+        "message": "Ok lets do it. Whats next?",
+        "require_tokens": [
+          "done",
+          "sending",
+          "draft",
+          "here",
+          "confirm",
+          "proceed",
+          "next"
+        ],
+        "turn_number": 2
+      }
+    ]
+  },
+  {
+    "description": "hostile refusal then off-topic GST filing request",
+    "merchant_id": "m_003_studio11_salon_hyderabad",
+    "name": "hostile then off-topic",
+    "scenario_id": "e4_003_hostile_then_offtopic",
+    "turns": [
+      {
+        "allowed_actions": [
+          "end",
+          "send"
+        ],
+        "conversation_id": "conv_hostile_1",
+        "description": "turn 1: hostile -> end or apology",
+        "expected_action": "end",
+        "from_role": "merchant",
+        "message": "Stop messaging me. This is useless spam.",
+        "require_tokens_if_send": [
+          "sorry",
+          "apolog",
+          "won't"
+        ],
+        "turn_number": 2
+      },
+      {
+        "allowed_actions": [
+          "send",
+          "end"
+        ],
+        "conversation_id": "conv_hostile_2",
+        "description": "turn 2: off-topic turn must be politely declined and redirected",
+        "expected_action": "send",
+        "from_role": "merchant",
+        "message": "Btw can you also help me with my GST filing?",
+        "turn_number": 2
+      }
+    ]
+  },
+  {
+    "description": "what's my exact Google ranking for 'dentist in Delhi'?",
+    "merchant_id": "m_001_drmeera_dentist_delhi",
+    "name": "curveball we cannot answer",
+    "scenario_id": "e4_004_curveball",
+    "turns": [
+      {
+        "conversation_id": "conv_curveball_1",
+        "description": "must not fabricate a number",
+        "expected_action": "send",
+        "forbid_tokens": [
+          "rank 1",
+          "rank 2",
+          "#1",
+          "#2"
+        ],
+        "from_role": "merchant",
+        "message": "what's my exact Google ranking for 'dentist in Delhi'?",
+        "turn_number": 2
+      }
+    ]
+  },
+  {
+    "description": "'ok' then '.' then '???' -> must not repeat verbatim, must end after 3 unanswered nudges",
+    "merchant_id": "m_005_pizzajunction_restaurant_delhi",
+    "name": "silence / non-answer",
+    "scenario_id": "e4_005_silence",
+    "turns": [
+      {
+        "allowed_actions": [
+          "send",
+          "wait"
+        ],
+        "conversation_id": "conv_silence_1",
+        "expected_action": "send",
+        "from_role": "merchant",
+        "message": "ok",
+        "turn_number": 2
+      },
+      {
+        "allowed_actions": [
+          "wait",
+          "send",
+          "end"
+        ],
+        "conversation_id": "conv_silence_1",
+        "expected_action": "wait",
+        "from_role": "merchant",
+        "message": ".",
+        "turn_number": 3
+      },
+      {
+        "allowed_actions": [
+          "end",
+          "wait"
+        ],
+        "conversation_id": "conv_silence_1",
+        "expected_action": "end",
+        "from_role": "merchant",
+        "message": "???",
+        "turn_number": 4
+      }
+    ]
+  },
+  {
+    "description": "English turn then Hindi romanised turn -> reply switches to hi_en",
+    "merchant_id": "m_006_southindiancafe_restaurant_bangalore",
+    "name": "mid-conversation language switch",
+    "scenario_id": "e4_006_lang_switch",
+    "turns": [
+      {
+        "conversation_id": "conv_switch_1",
+        "expected_action": "send",
+        "from_role": "merchant",
+        "message": "Hello, can you explain the offer in detail?",
+        "turn_number": 2
+      },
+      {
+        "conversation_id": "conv_switch_1",
+        "description": "reply must switch to hi_en code mix",
+        "expected_action": "send",
+        "from_role": "merchant",
+        "message": "theek hai bhai, mujhe thoda detail me samjhao kya karna hoga",
+        "turn_number": 3
+      }
+    ]
+  },
+  {
+    "description": "'yes do it' then 'actually no, cancel' -> must honour the cancel",
+    "merchant_id": "m_007_powerhouse_gym_bangalore",
+    "name": "commitment then reversal",
+    "scenario_id": "e4_007_commitment_reversal",
+    "turns": [
+      {
+        "conversation_id": "conv_rev_1",
+        "expected_action": "send",
+        "from_role": "merchant",
+        "message": "yes do it",
+        "turn_number": 2
+      },
+      {
+        "allowed_actions": [
+          "send",
+          "wait",
+          "end"
+        ],
+        "conversation_id": "conv_rev_1",
+        "description": "must honour the cancellation",
+        "expected_action": "send",
+        "from_role": "merchant",
+        "message": "actually no, cancel",
+        "turn_number": 3
+      }
+    ]
+  },
+  {
+    "description": "Pattern B text from challenge-brief.md section 9",
+    "merchant_id": "m_004_glamour_salon_pune",
+    "name": "auto-reply in Hinglish (Pattern B)",
+    "scenario_id": "e4_008_hinglish_auto_reply",
+    "turns": [
+      {
+        "allowed_actions": [
+          "send",
+          "wait"
+        ],
+        "conversation_id": "conv_pattern_b_1",
+        "expected_action": "send",
+        "from_role": "merchant",
+        "message": "Aapki jaankari ke liye bahut-bahut shukriya. Main aapki yeh sabhi baatein aur sujhaav hamari team tak pahuncha deti hoon.",
+        "turn_number": 2
+      },
+      {
+        "allowed_actions": [
+          "end",
+          "wait"
+        ],
+        "conversation_id": "conv_pattern_b_1",
+        "description": "detects automated assistant in Hinglish and exits gracefully",
+        "expected_action": "end",
+        "from_role": "merchant",
+        "message": "Aapki madad ke liye shukriya, lekin main ek automated assistant hoon...",
+        "turn_number": 3
+      }
+    ]
+  }
+]

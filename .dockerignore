@@ -1,0 +1,10 @@
+.git/
+.runtime-deps/
+.pytest_cache/
+__pycache__/
+**/__pycache__/
+*.py[cod]
+vera_state/
+harness/out/
+magicpin-ai-challenge.zip
+magicpin.zip

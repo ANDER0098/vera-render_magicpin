@@ -1,0 +1,31 @@
+# Render blueprint — deploy this repo as a Docker web service.
+# In the Render dashboard: New -> Blueprint -> pick this repo -> apply.
+# Values marked sync:false are entered in the dashboard when prompted
+# (or later under Environment) and are stored as encrypted secrets.
+services:
+  - type: web
+    name: vera-bot
+    runtime: docker
+    dockerfilePath: ./deploy/Dockerfile
+    healthCheckPath: /v1/healthz
+    plan: starter          # paid = always on; free instances sleep (missed ticks)
+    autoDeploy: true
+    envVars:
+      - key: VERA_LLM_PROVIDER
+        value: gemini
+      - key: VERA_LLM_MODEL
+        value: gemini-flash-lite-latest
+      - key: VERA_LLM_TIMEOUT
+        value: "6.5"
+      - key: VERA_LLM_API_KEY
+        sync: false         # secret — paste AIzaSy... in the dashboard
+      - key: VERA_TEAM_NAME
+        sync: false         # your registered team name
+      - key: VERA_TEAM_MEMBERS
+        sync: false         # comma-separated
+      - key: VERA_CONTACT_EMAIL
+        sync: false
+      - key: VERA_VERSION
+        value: "1.0.0"
+      - key: VERA_SUBMITTED_AT
+        sync: false         # set when you submit, e.g. 2026-09-28T09:00:00Z

@@ -1,0 +1,22 @@
+# Local Python/runtime artifacts
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.runtime-deps/
+venv/
+.venv/
+
+# Local state, logs, and evaluation outputs
+vera_state/
+harness/out/
+*.log
+
+# Secrets
+.env
+.env.*
+!.env.example
+*.key
+
+# Downloaded challenge archives
+magicpin-ai-challenge.zip
+magicpin.zip
